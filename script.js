@@ -1,119 +1,129 @@
-let  width = window.innerWidth;
-let  height = window.innerHeight;
-let circleArrX = [[width/2,height/5],[width/3,height/4], [(width/3)*2,height/3], [width/4,height/2], [width/5,height/3*2] , [width/5*2,height/3*2]];
+let  width = document.getElementById("container").offsetWidth;
+let  height = document.getElementById("container").offsetHeight;
+
+
+
+
+
+
+
 let scale = 1;
 let circleObjArr = [];
+    console.log(width);
+
 let stage = new Konva.Stage({
     container: 'container',
     width: width,
     height: height,
     draggable: true,
+
 });
 
 let layer1 = new Konva.Layer();
+let layer2 = new Konva.Layer();
+let layer3 = new Konva.Layer();
 
+stage.add(layer1);
+stage.add(layer2);
+stage.add(layer3);
+layer2.visible(false);
+layer3.visible(false);
 var group1= new Konva.Group({
     x: 120,
     y: 40,
 });
 
-stage.add(layer1);
-//рисуем линии пока-что вручную
-function drawLines(arrayOfCircles) {
-    var redLine1 = new Konva.Line({
-        points: [arrayOfCircles[0][0], arrayOfCircles[0][1], arrayOfCircles[1][0], arrayOfCircles[1][1]],
-        stroke: 'red',
-        strokeWidth: 15,
-        lineCap: 'round',
-        lineJoin: 'round'
-    });
-    group1.add(redLine1);
-    var redLine2 = new Konva.Line({
-        points: [arrayOfCircles[0][0], arrayOfCircles[0][1], arrayOfCircles[2][0], arrayOfCircles[2][1]],
-        stroke: 'red',
-        strokeWidth: 15,
-        lineCap: 'round',
-        lineJoin: 'round'
-    });
-    group1.add(redLine2);
-    var redLine3 = new Konva.Line({
-        points: [arrayOfCircles[1][0], arrayOfCircles[1][1], arrayOfCircles[3][0], arrayOfCircles[3][1]],
-        stroke: 'red',
-        strokeWidth: 15,
-        lineCap: 'round',
-        lineJoin: 'round'
-    });
-    group1.add(redLine3);
-    var redLine4 = new Konva.Line({
-        points: [arrayOfCircles[3][0], arrayOfCircles[3][1], arrayOfCircles[4][0], arrayOfCircles[4][1]],
-        stroke: 'red',
-        strokeWidth: 15,
-        lineCap: 'round',
-        lineJoin: 'round'
-    });
-    group1.add(redLine4);
-    var redLine5 = new Konva.Line({
-            points: [arrayOfCircles[3][0], arrayOfCircles[3][1], arrayOfCircles[5][0], arrayOfCircles[5][1]],
-        stroke: 'red',
-        strokeWidth: 15,
-        lineCap: 'round',
-        lineJoin: 'round'
-    });
-    group1.add(redLine5);
+var group2= new Konva.Group({
+    x: 120,
+    y: 40,
+});
+var group3= new Konva.Group({
+    x: 120,
+    y: 40,
+});
 
-}
-drawLines(circleArrX);
-//заполняем группу
-colour1 = "#F08080";
-colour2 = "#F00";
 
-for( let i = 0; i < circleArrX.length; i++){
 
-    let box = new Konva.Circle({
-        x:  circleArrX[i][0],
-        y: circleArrX[i][1],
-        radius: 100,
-        fill: colour1
 
+
+circleArr.forEach(function (circle) {
+
+    let CircleDraw = new Konva.Circle({
+        x:circle.posX,
+        y:circle.posY,
+        radius: circle.layer == 1 ? 20 : 7,
+        fill: circle.layer == 1 ?"red" : "green"
     });
 
+    switch(circle.layer) {
+        case 1:
+            group1.add(CircleDraw);
+            break;
+        case 2:
+            group2.add(CircleDraw);
+            break;
+        case 3:
+            group3.add(CircleDraw);
+            break;
+    };
 
-    group1.add(box);
-}
+
+        circle.childrenCirclesID.forEach(function (ID) {
+            let lineDraw = new Konva.Line({
+
+                points: [circleArr.find(circle => circle.ID == ID).posX,circleArr.find(circle => circle.ID == ID).posY, circle.posX,circle.posY],
+                stroke: circle.layer == 1 ?"red" : "green" ,
+               strokeWidth: circle.layer == 1 ? 2 : 0.7 ,
+                lineCap: 'round',
+                lineJoin: 'round'
+            })
+
+            switch(circle.layer) {
+                case 1:
+                    group1.add(lineDraw);
+                    break;
+                case 2:
+                    group2.add(lineDraw);
+                    break;
+                case 3:
+                    group3.add(lineDraw);
+                    break;
+            };
+
+        })
+
+
+    }
 
 
 
 
+)
 
 
-console.log(group1);
+layer3.add(group3);
+layer2.add(group2);
 layer1.add(group1);
 layer1.draw();
+layer2.draw();
+layer3.draw();
 
+function layerVisability(newScale) {
+    if(newScale > 3){
 
+        layer1.visible(false);
+        layer2.visible(true);
 
+    }else if (newScale < 3 ) {
+        layer2.visible(false);
+        layer1.visible(true);
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    console.log(layer1.isVisible());
+}
 //скейл колесиком
 var scaleBy = 1.03;
+
 stage.on('wheel', e => {
     e.evt.preventDefault();
     var oldScale = stage.scaleX();
@@ -125,7 +135,8 @@ stage.on('wheel', e => {
 
     var newScale =
         e.evt.deltaY > 0 ? oldScale / scaleBy : oldScale * scaleBy;
-    stage.scale({ x: newScale, y: newScale });
+
+        stage.scale({ x: newScale, y: newScale });
 
     var newPos = {
         x:
@@ -135,21 +146,13 @@ stage.on('wheel', e => {
             -(mousePointTo.y - stage.getPointerPosition().y / newScale) *
             newScale
     };
+
+
     stage.position(newPos);
     stage.batchDraw();
     console.log(newScale);
 
-    if(newScale > 1.4){
-        group1.getChildren(function(node){
-            return node.getClassName() === 'Circle';
-        }).forEach(circle => circle.fill(colour2));
-        layer1.draw();
-    }else {
-        group1.getChildren(function(node){
-            return node.getClassName() === 'Circle';
-        }).forEach(circle => circle.fill(colour1));
-        layer1.draw();
-    }
+    layerVisability(newScale);
 });
 
 
