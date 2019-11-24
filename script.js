@@ -48,6 +48,35 @@ var group3= new Konva.Group({
 
 circleArr.forEach(function (circle) {
 
+        //line draw
+
+        circle.childrenCirclesID.forEach(function (ID) {
+            let lineDraw = new Konva.Line({
+
+                points: [circleArr.find(circle => circle.ID == ID).posX,circleArr.find(circle => circle.ID == ID).posY, circle.posX,circle.posY],
+                stroke: circle.layer == 1 ?"red" : "green" ,
+                strokeWidth: circle.layer == 1 ? 2 : 0.7 ,
+                lineCap: 'round',
+                lineJoin: 'round'
+            })
+
+            switch(circle.layer) {
+                case 1:
+                    group1.add(lineDraw);
+                    break;
+                case 2:
+                    group2.add(lineDraw);
+                    break;
+                case 3:
+                    group3.add(lineDraw);
+                    break;
+            };
+
+        })
+
+
+
+//circle draw
     let CircleDraw = new Konva.Circle({
         x:circle.posX,
         y:circle.posY,
@@ -67,30 +96,6 @@ circleArr.forEach(function (circle) {
             break;
     };
 
-
-        circle.childrenCirclesID.forEach(function (ID) {
-            let lineDraw = new Konva.Line({
-
-                points: [circleArr.find(circle => circle.ID == ID).posX,circleArr.find(circle => circle.ID == ID).posY, circle.posX,circle.posY],
-                stroke: circle.layer == 1 ?"red" : "green" ,
-               strokeWidth: circle.layer == 1 ? 2 : 0.7 ,
-                lineCap: 'round',
-                lineJoin: 'round'
-            })
-
-            switch(circle.layer) {
-                case 1:
-                    group1.add(lineDraw);
-                    break;
-                case 2:
-                    group2.add(lineDraw);
-                    break;
-                case 3:
-                    group3.add(lineDraw);
-                    break;
-            };
-
-        })
 
 
     }
@@ -154,5 +159,7 @@ stage.on('wheel', e => {
 
     layerVisability(newScale);
 });
+
+
 
 
