@@ -11,17 +11,18 @@
             overflow: hidden;
             background-color: #f0f0f0;
         }
-#container{
-    background-color: #00caf0;
-    width: 1200px;
-    height:  1200px;
 
-}
+        #container {
+            background-color: #00caf0;
+            width: 1200px;
+            height: 1200px;
+
+        }
 
         #menu {
             display: none;
             position: absolute;
-            width: 60px;
+
             background-color: white;
             box-shadow: 0 0 5px grey;
             border-radius: 3px;
@@ -33,9 +34,33 @@
             border: none;
             margin: 0;
             padding: 10px;
+            font-size: 50px;
         }
 
         #menu button:hover {
+            background-color: lightgray;
+        }
+
+
+        #menu-add {
+            display: none;
+            position: absolute;
+
+            background-color: white;
+            box-shadow: 0 0 5px grey;
+            border-radius: 3px;
+        }
+
+        #menu-add button {
+            width: 100%;
+            background-color: white;
+            border: none;
+            margin: 0;
+            padding: 10px;
+            font-size: 50px;
+        }
+
+        #menu-add button:hover {
             background-color: lightgray;
         }
 
@@ -44,11 +69,15 @@
 <body>
 
 
-
-<div id="container"> </div>
-<div  id = "menu">
+<div id="container"></div>
+<div id="menu">
     <div>
         <button id="delete-button">Delete</button>
+    </div>
+</div>
+<div id="menu-add">
+    <div>
+        <button id="add-button">Add</button>
     </div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
