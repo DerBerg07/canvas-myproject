@@ -22,7 +22,6 @@
         #menu {
             display: none;
             position: absolute;
-
             background-color: white;
             box-shadow: 0 0 5px grey;
             border-radius: 3px;
@@ -34,7 +33,13 @@
             border: none;
             margin: 0;
             padding: 10px;
-            font-size: 50px;
+            font-size: 25px;
+        }
+        #menu input {
+            width: 150px;
+            background-color: white;
+            margin: 0;
+            font-size: 25px;
         }
 
         #menu button:hover {
@@ -57,7 +62,7 @@
             border: none;
             margin: 0;
             padding: 10px;
-            font-size: 50px;
+            font-size: 25px;
         }
 
         #menu-add button:hover {
@@ -73,6 +78,9 @@
 <div id="menu">
     <div>
         <button id="delete-button">Delete</button>
+        <button id="line-button">add line</button>
+        <button id="colour-button">set colour </button>
+        <input id = "colour" type="text">
     </div>
 </div>
 <div id="menu-add">

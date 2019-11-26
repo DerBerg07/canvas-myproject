@@ -1,10 +1,11 @@
+'use strict';
 let width = document.getElementById("container").offsetWidth;
 let height = document.getElementById("container").offsetHeight;
 let newPosGlobal = {x: 0, y: 0};
 let newScaleGlobal = 1;
 let scale = 1;
 let circleObjArr = [];
-console.log(width);
+let currentVisibleLayer;
 
 let stage = new Konva.Stage({
     container: 'container',
@@ -14,96 +15,90 @@ let stage = new Konva.Stage({
 
 });
 
-let layer1 = new Konva.Layer();
-let layer2 = new Konva.Layer();
-let layer3 = new Konva.Layer();
+let convaLayers = [];
 
-stage.add(layer1);
-stage.add(layer2);
-stage.add(layer3);
-layer2.visible(false);
-layer3.visible(false);
+//обавляем слои
+
+for(let i = 0; i < mainArr.length; i++){
+    convaLayers[i] = new Konva.Layer();
+    convaLayers[i].visible(false);
+
+    stage.add(convaLayers[i]);
+
+}
 
 
-circleArr.forEach(function (circle) {
 
-        //line draw
+console.log(stage.getChildren());
+
+
+mainArr.forEach(function (layer, index) {
+
+    layer.childCircles.forEach(function (circle) {
+
 
         circle.childrenCirclesID.forEach(function (ID) {
             let lineDraw = new Konva.Line({
-
-                points: [circleArr.find(circle => circle.ID == ID).posX, circleArr.find(circle => circle.ID == ID).posY, circle.posX, circle.posY],
-                stroke: circle.layer == 1 ? "red" : "green",
-                strokeWidth: circle.layer == 1 ? 2 : 0.7,
+                points: [mainArr[index].childCircles.find(circle => circle.ID === ID).posX, mainArr[index].childCircles.find(circle => circle.ID === ID).posY, circle.posX, circle.posY],
+                stroke: "red",
+                strokeWidth: 2/(index + 1),
                 lineCap: 'round',
                 lineJoin: 'round'
             })
 
-            switch (circle.layer) {
-                case 1:
-                    layer1.add(lineDraw);
-                    break;
-                case 2:
-                    layer2.add(lineDraw);
-                    break;
-                case 3:
-                    layer3.add(lineDraw);
-                    break;
-            }
-            ;
+            convaLayers[index].add(lineDraw);
 
-        })
+        });
 
 
-//circle draw
+
         let CircleDraw = new Konva.Circle({
             id: circle.ID,
             x: circle.posX,
             y: circle.posY,
-            radius: circle.layer == 1 ? 20 : 7,
-            fill: circle.layer == 1 ? "red" : "green"
+            radius: 20/(index + 1),
+            fill: "red"
         });
 
-        console.log(circle.ID);
-        console.log(CircleDraw.id());
-        switch (circle.layer) {
-            case 1:
-                layer1.add(CircleDraw);
-                break;
-            case 2:
-                layer2.add(CircleDraw);
-                break;
-            case 3:
-                layer3.add(CircleDraw);
-                break;
-        }
-        ;
+        convaLayers[index].add(CircleDraw);
+
+    })
+    convaLayers[index].draw();
+    stage.batchDraw();
+});
 
 
-    }
-)
+convaLayers[0].visible(true);
+currentVisibleLayer = 0;
 
 
-layer1.draw();
-layer2.draw();
-layer3.draw();
 
-function layerVisability(newScale) {
-    if (newScale > 3) {
 
-        layer1.visible(false);
-        layer2.visible(true);
 
-    } else if (newScale < 3) {
-        layer2.visible(false);
-        layer1.visible(true);
+function layerVisability(newScale, oldScale, delta) {
+
+    if(newScale % 1 < oldScale% 1 && delta === -100){
+        console.log("oleg");
+        convaLayers[currentVisibleLayer].visible(false);
+        currentVisibleLayer++;
+        convaLayers[currentVisibleLayer].visible(true);
     }
 
-    console.log(layer1.isVisible());
+    if(newScale % 1 > oldScale% 1 && delta === 100){
+        console.log("dima");
+        convaLayers[currentVisibleLayer].visible(false);
+        currentVisibleLayer--;
+        convaLayers[currentVisibleLayer].visible(true);
+    }
+
+    console.log(newScale);
+
+
+
 }
 
 //скейл колесиком
-var scaleBy = 1.03;
+var scaleBy = 0.05;
 
 stage.on('wheel', e => {
     e.evt.preventDefault();
@@ -115,7 +110,7 @@ stage.on('wheel', e => {
     };
 
     var newScale =
-        e.evt.deltaY > 0 ? oldScale / scaleBy : oldScale * scaleBy;
+        e.evt.deltaY > 0 ? oldScale - scaleBy : oldScale + scaleBy;
 
     stage.scale({x: newScale, y: newScale});
 
@@ -131,10 +126,10 @@ stage.on('wheel', e => {
 
     stage.position(newPos);
     stage.batchDraw();
-    console.log(newScale);
+
     newScaleGlobal  =newScale;
     newPosGlobal = newPos;
-    layerVisability(newScale);
+    layerVisability(newScale, oldScale, e.evt.deltaY);
 });
 
 

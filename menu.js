@@ -1,9 +1,32 @@
 let currentShape;
-
-
 let dropmenuNode = document.getElementById('menu');
 let dropMenuAddNode = document.getElementById('menu-add');
-//deleting elements
+let dragging = false;
+
+let findCurLayer = function () {
+    let trueLayer;
+    convaLayers.forEach(function (layer, index) {
+        if (layer.visible() == true) {
+
+            trueLayer = index;
+        }
+
+    })
+    return trueLayer;
+};
+
+
+console.log(convaLayers[0].getChildren());
+
+
+stage.on('click', e => {
+
+
+    dropMenuAddNode.style.display = 'none';
+    dropmenuNode.style.display = 'none';
+})
+
+
 document.getElementById('delete-button').addEventListener('click', () => {
 
     if (currentShape.getClassName() === 'Circle') {
@@ -29,45 +52,91 @@ document.getElementById('delete-button').addEventListener('click', () => {
         })
 
     }
-    console.log(currentShape);
 
-    circleArr.splice(circleArr.indexOf(circleArr.find(circle => circle.ID === currentShape.id())), 1);
-    console.log(circleArr);
+
+    mainArr[findCurLayer()].childCircles.splice(mainArr[findCurLayer()].childCircles.indexOf(mainArr[findCurLayer()].childCircles.find(circle => circle.ID === currentShape.id())), 1);
+    dropMenuAddNode.style.display = 'none';
+    dropmenuNode.style.display = 'none';
     currentShape.destroy();
     stage.batchDraw();
 });
 
 
+document.getElementById('colour-button').addEventListener('click', () => {
+    let colour = document.getElementById('colour').value;
+
+    currentShape.fill('#' + colour);
+    dropMenuAddNode.style.display = 'none';
+    dropmenuNode.style.display = 'none';
+    stage.batchDraw();
+})
+
+
 //adding element
 document.getElementById('add-button').addEventListener('click', () => {
-    console.log(stage.x());
-    console.log(newPosGlobal);
+
+
+    dropMenuAddNode.style.display = 'none';
+    dropmenuNode.style.display = 'none';
+
+    let maxID = -1;
+
+    mainArr[findCurLayer()].childCircles.forEach(function (circle) {
+
+            if (circle.ID > maxID) {
+                maxID = circle.ID;
+            }
+
+        }
+    );
+
+
     let circle = new Konva.Circle({
-        x: (stage.getPointerPosition().x - stage.x() )/ newScaleGlobal,
-        y: (stage.getPointerPosition().y - stage.y())/ newScaleGlobal,
+        id: maxID,
+        x: (stage.getPointerPosition().x - stage.x()) / newScaleGlobal,
+        y: (stage.getPointerPosition().y - stage.y()) / newScaleGlobal,
         radius: 20,
-        fill: "red"
+        fill: '#929229'
     });
+
+
     //newScaleGlobal
-    layer1.add(circle);
+    convaLayers.forEach(function (layer, index) {
+        if (layer.visible() == true) {
+            circle.radius(circle.radius() / (index + 1));
+            layer.add(circle);
+        }
+
+    })
+
+
+    currentShape = circle;
     circle.startDrag();
 
 
+    circle.on('dragend', function (e) {
+        mainArr[findCurLayer()].childCircles.push({
+            ID: maxID + 1,
+            posX: circle.x(),
+            posY: circle.y(),
+            layer: findCurLayer(),
+            childrenCirclesID: []
+        })
+    })
+
 })
 
 
-
-
-
+stage.on('drop', function (e) {
+    console.log("das");
+})
 
 
 window.addEventListener('click', () => {
-    dropMenuAddNode.style.display = 'none';
-    dropmenuNode.style.display = 'none';
+
 })
 stage.on('wheel', e => {
-    dropmenuNode.style.display = 'none';
-    dropMenuAddNode.style.display = 'none';
+
 })
 
 
