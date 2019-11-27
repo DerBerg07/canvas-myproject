@@ -2,7 +2,8 @@ let currentShape;
 let dropmenuNode = document.getElementById('menu');
 let dropMenuAddNode = document.getElementById('menu-add');
 let dragging = false;
-
+let firstCircle;
+let secondCircle;
 let findCurLayer = function () {
     let trueLayer;
     convaLayers.forEach(function (layer, index) {
@@ -54,12 +55,54 @@ document.getElementById('delete-button').addEventListener('click', () => {
     }
 
 
+
+
     mainArr[findCurLayer()].childCircles.splice(mainArr[findCurLayer()].childCircles.indexOf(mainArr[findCurLayer()].childCircles.find(circle => circle.ID === currentShape.id())), 1);
     dropMenuAddNode.style.display = 'none';
     dropmenuNode.style.display = 'none';
     currentShape.destroy();
     stage.batchDraw();
 });
+
+
+
+
+
+document.getElementById('line-button').addEventListener('click', () => {
+    console.log("dadsa");
+
+
+    firstCircle = currentShape;
+
+    stage.on('click', function (e) {
+        console.log(e.target);
+        if(firstCircle && e.target instanceof Konva.Circle ){
+            console.log("oleg");
+
+            let line = new Konva.Line({
+                points: [firstCircle.x(), firstCircle.y(),e.target.x(),e.target.y()],
+                stroke: "red",
+                strokeWidth: 2/(findCurLayer() + 1),
+                lineCap: 'round',
+                lineJoin: 'round'
+            })
+            convaLayers[findCurLayer()].add(line);
+            mainArr[findCurLayer()].childCircles.find(circle => circle.ID === firstCircle.id()).childrenCirclesID.push(e.target.id());
+            firstCircle = null;
+            stage.batchDraw();
+        }
+    })
+
+
+
+
+    dropMenuAddNode.style.display = 'none';
+    dropmenuNode.style.display = 'none';
+
+});
+
+
+
 
 
 document.getElementById('colour-button').addEventListener('click', () => {
