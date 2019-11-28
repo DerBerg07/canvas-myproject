@@ -48,6 +48,7 @@
 
 
         #menu-add {
+
             display: none;
             position: absolute;
 
@@ -64,6 +65,7 @@
             width: 100%;
         }
         #menu-add button {
+            z-index: 999;
             width: 100%;
             background-color: white;
             border: none;
@@ -81,7 +83,11 @@
 <body>
 
 
-<div id="container"></div>
+<div id="container">
+
+
+
+</div>
 
 <div id="layer-menu">
     <button id="add-layer">
@@ -90,6 +96,9 @@
     <label id = "currentLayer">
         Layer 1
     </label>
+    <button id="add-full">
+        add layer
+    </button>
 </div>
 <div id="menu">
     <div>

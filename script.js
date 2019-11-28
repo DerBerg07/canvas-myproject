@@ -15,9 +15,14 @@ let stage = new Konva.Stage({
 
 });
 
+
+document.getElementById("container").appendChild(document.getElementById("menu"));
+document.getElementById("container").appendChild(document.getElementById("menu-add"));
+document.getElementById("container").appendChild(document.getElementById("layer-menu"));
+
 let convaLayers = [];
 
-//обавляем слои
+//обавляем слои,
 
 function addLayersToStage() {
     for(let i = 0; i < mainArr.length; i++){

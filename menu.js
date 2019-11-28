@@ -131,7 +131,7 @@ document.getElementById('add-button').addEventListener('click', () => {
     let maxID = -1;
 
     mainArr[findCurLayer()].childCircles.forEach(function (circle) {
-        
+
             if (circle.ID > maxID) {
                 maxID = circle.ID;
             }
@@ -225,6 +225,27 @@ document.getElementById('add-layer').addEventListener('click', () => {
 
         convaLayers.push(new Konva.Layer);
     mainArr.push({childCircles: []})
-    stage.add(convaLayers[mainArr.length - 1]);
+    stage.add(convaLayers[(mainArr.length - 1)]);
+    console.log(convaLayers);
 
 });
+
+document.getElementById('add-full').addEventListener('click', () => {
+
+    if (document.getElementById("container").requestFullscreen) {
+        document.getElementById("container").requestFullscreen();
+    } else if (document.getElementById("container").mozRequestFullScreen) { /* Firefox */
+        document.getElementById("container").mozRequestFullScreen();
+    } else if (document.getElementById("container").webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+        document.getElementById("container").webkitRequestFullscreen();
+    } else if (document.getElementById("container").msRequestFullscreen) { /* IE/Edge */
+        document.getElementById("container").msRequestFullscreen();
+    }
+    console.log(width);
+    width = window.innerWidth;
+    height = document.getElementById("container").offsetHeight;
+    console.log(width);
+    stage.width(width);
+    stage.height(height);
+});
+
