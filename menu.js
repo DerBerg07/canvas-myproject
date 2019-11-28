@@ -85,10 +85,16 @@ document.getElementById('line-button').addEventListener('click', () => {
                 strokeWidth: 2/(findCurLayer() + 1),
                 lineCap: 'round',
                 lineJoin: 'round'
+
             })
+
             convaLayers[findCurLayer()].add(line);
+
+            line.moveToBottom();
             mainArr[findCurLayer()].childCircles.find(circle => circle.ID === firstCircle.id()).childrenCirclesID.push(e.target.id());
             firstCircle = null;
+
+
             stage.batchDraw();
         }
     })
@@ -125,7 +131,7 @@ document.getElementById('add-button').addEventListener('click', () => {
     let maxID = -1;
 
     mainArr[findCurLayer()].childCircles.forEach(function (circle) {
-
+        
             if (circle.ID > maxID) {
                 maxID = circle.ID;
             }
@@ -143,11 +149,15 @@ document.getElementById('add-button').addEventListener('click', () => {
     });
 
 
+
+
     //newScaleGlobal
     convaLayers.forEach(function (layer, index) {
         if (layer.visible() == true) {
+            console.log(layer);
             circle.radius(circle.radius() / (index + 1));
             layer.add(circle);
+
         }
 
     })
@@ -158,12 +168,13 @@ document.getElementById('add-button').addEventListener('click', () => {
 
 
     circle.on('dragend', function (e) {
+
         mainArr[findCurLayer()].childCircles.push({
             ID: maxID + 1,
             posX: circle.x(),
             posY: circle.y(),
             layer: findCurLayer(),
-            childrenCirclesID: []
+            childrenCirclesID: [],
         })
     })
 
@@ -204,4 +215,16 @@ stage.on('contextmenu', function (e) {
     var containerRect = stage.container().getBoundingClientRect();
     dropmenuNode.style.top = containerRect.top + stage.getPointerPosition().y + 4 + 'px';
     dropmenuNode.style.left = containerRect.left + stage.getPointerPosition().x + 4 + 'px';
+});
+
+
+
+
+
+document.getElementById('add-layer').addEventListener('click', () => {
+
+        convaLayers.push(new Konva.Layer);
+    mainArr.push({childCircles: []})
+    stage.add(convaLayers[mainArr.length - 1]);
+
 });

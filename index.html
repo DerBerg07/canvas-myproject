@@ -55,7 +55,14 @@
             box-shadow: 0 0 5px grey;
             border-radius: 3px;
         }
-
+        #layer-menu {
+            position: absolute;
+            left: 10px;
+            top: 0px;
+        }
+        #layer-menu button{
+            width: 100%;
+        }
         #menu-add button {
             width: 100%;
             background-color: white;
@@ -75,6 +82,15 @@
 
 
 <div id="container"></div>
+
+<div id="layer-menu">
+    <button id="add-layer">
+        add layer
+    </button>
+    <label id = "currentLayer">
+        Layer 1
+    </label>
+</div>
 <div id="menu">
     <div>
         <button id="delete-button">Delete</button>

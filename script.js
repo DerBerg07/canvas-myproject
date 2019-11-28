@@ -19,13 +19,16 @@ let convaLayers = [];
 
 //обавляем слои
 
-for(let i = 0; i < mainArr.length; i++){
-    convaLayers[i] = new Konva.Layer();
-    convaLayers[i].visible(false);
+function addLayersToStage() {
+    for(let i = 0; i < mainArr.length; i++){
+        convaLayers[i] = new Konva.Layer();
+        convaLayers[i].visible(false);
 
-    stage.add(convaLayers[i]);
+        stage.add(convaLayers[i]);
 
+    }
 }
+addLayersToStage();
 
 
 
@@ -47,7 +50,7 @@ mainArr.forEach(function (layer, index) {
             })
 
             convaLayers[index].add(lineDraw);
-
+            lineDraw.moveToBottom();
         });
 
 
@@ -61,6 +64,7 @@ mainArr.forEach(function (layer, index) {
         });
 
         convaLayers[index].add(CircleDraw);
+        CircleDraw.moveToTop();
 
     })
     convaLayers[index].draw();
@@ -91,6 +95,7 @@ function layerVisability(newScale, oldScale, delta) {
         convaLayers[currentVisibleLayer].visible(true);
     }
 
+    document.getElementById('currentLayer').innerText = "Layer" + (findCurLayer() + 1);
     console.log(newScale);
 
 
