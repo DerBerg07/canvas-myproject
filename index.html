@@ -4,82 +4,33 @@
 
     <meta charset="UTF-8">
     <title>Title</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: #f0f0f0;
-        }
-
-        #container {
-            background-color: #00caf0;
-            width: 1200px;
-            height: 1200px;
-            margin: 30px auto;
-
-        }
-
-        #menu {
-            display: none;
-            position: absolute;
-            background-color: white;
-            box-shadow: 0 0 5px grey;
-            border-radius: 3px;
-        }
-
-        #menu button {
-            width: 100%;
-            background-color: white;
-            border: none;
-            margin: 0;
-            padding: 10px;
-            font-size: 25px;
-        }
-        #menu input {
-            width: 150px;
-            background-color: white;
-            margin: 0;
-            font-size: 25px;
-        }
-
-        #menu button:hover {
-            background-color: lightgray;
-        }
-
-
-        #menu-add {
-            display: none;
-            position: absolute;
-
-            background-color: white;
-            box-shadow: 0 0 5px grey;
-            border-radius: 3px;
-        }
-
-        #menu-add button {
-            width: 100%;
-            background-color: white;
-            border: none;
-            margin: 0;
-            padding: 10px;
-            font-size: 25px;
-        }
-
-        #menu-add button:hover {
-            background-color: lightgray;
-        }
-
-    </style>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<div id="container"></div>
+
+
+<div id="container">
+
+
+</div>
+
+<div id="layer-menu">
+    <button id="add-layer">
+        add layer
+    </button>
+    <label id="currentLayer">
+        Layer 1
+    </label>
+    <button id="add-full">
+        Full screen
+    </button>
+</div>
 <div id="menu">
     <div>
         <button id="delete-button">Delete</button>
         <button id="line-button">add line</button>
-        <button id="colour-button">set colour </button>
-        <input id = "colour" type="text">
+        <button id="colour-button">set colour</button>
+        <input id="colour" type="color">
     </div>
 </div>
 <div id="menu-add">
