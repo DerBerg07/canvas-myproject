@@ -1,15 +1,11 @@
-let  width = document.getElementById("container").offsetWidth;
-let  height = document.getElementById("container").offsetHeight;
-
-
-
-
-
-
-
+'use strict';
+let width = document.getElementById("container").offsetWidth;
+let height = document.getElementById("container").offsetHeight;
+let newPosGlobal = {x: 0, y: 0};
+let newScaleGlobal = 1;
 let scale = 1;
 let circleObjArr = [];
-    console.log(width);
+let currentVisibleLayer;
 
 let stage = new Konva.Stage({
     container: 'container',
@@ -19,110 +15,90 @@ let stage = new Konva.Stage({
 
 });
 
-let layer1 = new Konva.Layer();
-let layer2 = new Konva.Layer();
-let layer3 = new Konva.Layer();
+let convaLayers = [];
 
-stage.add(layer1);
-stage.add(layer2);
-stage.add(layer3);
-layer2.visible(false);
-layer3.visible(false);
-var group1= new Konva.Group({
-    x: 120,
-    y: 40,
-});
+//обавляем слои
 
-var group2= new Konva.Group({
-    x: 120,
-    y: 40,
-});
-var group3= new Konva.Group({
-    x: 120,
-    y: 40,
-});
+for(let i = 0; i < mainArr.length; i++){
+    convaLayers[i] = new Konva.Layer();
+    convaLayers[i].visible(false);
+
+    stage.add(convaLayers[i]);
+
+}
 
 
 
+console.log(stage.getChildren());
 
 
-circleArr.forEach(function (circle) {
+mainArr.forEach(function (layer, index) {
 
-    let CircleDraw = new Konva.Circle({
-        x:circle.posX,
-        y:circle.posY,
-        radius: circle.layer == 1 ? 20 : 7,
-        fill: circle.layer == 1 ?"red" : "green"
-    });
-
-    switch(circle.layer) {
-        case 1:
-            group1.add(CircleDraw);
-            break;
-        case 2:
-            group2.add(CircleDraw);
-            break;
-        case 3:
-            group3.add(CircleDraw);
-            break;
-    };
+    layer.childCircles.forEach(function (circle) {
 
 
         circle.childrenCirclesID.forEach(function (ID) {
             let lineDraw = new Konva.Line({
-
-                points: [circleArr.find(circle => circle.ID == ID).posX,circleArr.find(circle => circle.ID == ID).posY, circle.posX,circle.posY],
-                stroke: circle.layer == 1 ?"red" : "green" ,
-               strokeWidth: circle.layer == 1 ? 2 : 0.7 ,
+                points: [mainArr[index].childCircles.find(circle => circle.ID === ID).posX, mainArr[index].childCircles.find(circle => circle.ID === ID).posY, circle.posX, circle.posY],
+                stroke: "red",
+                strokeWidth: 2/(index + 1),
                 lineCap: 'round',
                 lineJoin: 'round'
             })
 
-            switch(circle.layer) {
-                case 1:
-                    group1.add(lineDraw);
-                    break;
-                case 2:
-                    group2.add(lineDraw);
-                    break;
-                case 3:
-                    group3.add(lineDraw);
-                    break;
-            };
+            convaLayers[index].add(lineDraw);
 
-        })
+        });
 
 
+
+        let CircleDraw = new Konva.Circle({
+            id: circle.ID,
+            x: circle.posX,
+            y: circle.posY,
+            radius: 20/(index + 1),
+            fill: "red"
+        });
+
+        convaLayers[index].add(CircleDraw);
+
+    })
+    convaLayers[index].draw();
+    stage.batchDraw();
+});
+
+
+convaLayers[0].visible(true);
+currentVisibleLayer = 0;
+
+
+
+
+
+function layerVisability(newScale, oldScale, delta) {
+
+    if(newScale % 1 < oldScale% 1 && delta === -100){
+        console.log("oleg");
+        convaLayers[currentVisibleLayer].visible(false);
+        currentVisibleLayer++;
+        convaLayers[currentVisibleLayer].visible(true);
     }
 
-
-
-
-)
-
-
-layer3.add(group3);
-layer2.add(group2);
-layer1.add(group1);
-layer1.draw();
-layer2.draw();
-layer3.draw();
-
-function layerVisability(newScale) {
-    if(newScale > 3){
-
-        layer1.visible(false);
-        layer2.visible(true);
-
-    }else if (newScale < 3 ) {
-        layer2.visible(false);
-        layer1.visible(true);
+    if(newScale % 1 > oldScale% 1 && delta === 100){
+        console.log("dima");
+        convaLayers[currentVisibleLayer].visible(false);
+        currentVisibleLayer--;
+        convaLayers[currentVisibleLayer].visible(true);
     }
 
-    console.log(layer1.isVisible());
+    console.log(newScale);
+
+
+
 }
+
 //скейл колесиком
-var scaleBy = 1.03;
+var scaleBy = 0.05;
 
 stage.on('wheel', e => {
     e.evt.preventDefault();
@@ -134,9 +110,9 @@ stage.on('wheel', e => {
     };
 
     var newScale =
-        e.evt.deltaY > 0 ? oldScale / scaleBy : oldScale * scaleBy;
+        e.evt.deltaY > 0 ? oldScale - scaleBy : oldScale + scaleBy;
 
-        stage.scale({ x: newScale, y: newScale });
+    stage.scale({x: newScale, y: newScale});
 
     var newPos = {
         x:
@@ -150,9 +126,12 @@ stage.on('wheel', e => {
 
     stage.position(newPos);
     stage.batchDraw();
-    console.log(newScale);
 
-    layerVisability(newScale);
+    newScaleGlobal  =newScale;
+    newPosGlobal = newPos;
+    layerVisability(newScale, oldScale, e.evt.deltaY);
 });
+
+
 
 
