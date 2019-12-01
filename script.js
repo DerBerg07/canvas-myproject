@@ -58,7 +58,7 @@ mainArr.forEach(function (layer, index) {
             lineDraw.moveToBottom();
         });
 
-
+        console.log(circle.ID);
 
         let CircleDraw = new Konva.Circle({
             id: circle.ID,
@@ -70,6 +70,22 @@ mainArr.forEach(function (layer, index) {
 
         convaLayers[index].add(CircleDraw);
         CircleDraw.moveToTop();
+
+
+        // ДОБАВЛЕНИЕ НАДПИСИ НАД КРУЖКАМИ
+        let circleNumber = new Konva.Text({
+
+                x: circle.posX,
+                y: circle.posY,
+                text: circle.ID,
+                fontSize: 30,
+                fontFamily: 'Calibri',
+                fill: 'black'
+
+        })
+
+        CircleDraw.add(circleNumber);
+        circleNumber.moveToTop();
 
     })
     convaLayers[index].draw();
@@ -85,23 +101,27 @@ currentVisibleLayer = 0;
 
 
 function layerVisability(newScale, oldScale, delta) {
+    console.log((newScale % 1));
+    console.log((oldScale % 1));
+    console.log(delta);
 
-    if(newScale % 1 < oldScale% 1 && delta === -100){
+    if(newScale % 1 < oldScale % 1 && delta < 0){
         console.log("oleg");
         convaLayers[currentVisibleLayer].visible(false);
         currentVisibleLayer++;
         convaLayers[currentVisibleLayer].visible(true);
     }
 
-    if(newScale % 1 > oldScale% 1 && delta === 100){
+    if(newScale % 1 > oldScale% 1 && delta > 0  ){
         console.log("dima");
         convaLayers[currentVisibleLayer].visible(false);
         currentVisibleLayer--;
         convaLayers[currentVisibleLayer].visible(true);
+
     }
 
     document.getElementById('currentLayer').innerText = "Layer" + (findCurLayer() + 1);
-    console.log(newScale);
+
 
 
 

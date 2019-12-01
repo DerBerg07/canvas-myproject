@@ -151,6 +151,8 @@ document.getElementById('add-button').addEventListener('click', () => {
 
 
 
+
+
     //newScaleGlobal
     convaLayers.forEach(function (layer, index) {
         if (layer.visible() == true) {
@@ -169,14 +171,34 @@ document.getElementById('add-button').addEventListener('click', () => {
 
     circle.on('dragend', function (e) {
 
+
         mainArr[findCurLayer()].childCircles.push({
-            ID: maxID + 1,
             posX: circle.x(),
+            ID: maxID + 1,
             posY: circle.y(),
             layer: findCurLayer(),
             childrenCirclesID: [],
         })
-    })
+        console.log("ds");
+        // ДОБАВЛЕНИЕ НАДПИСИ НАД КРУЖКАМИ
+        let circleNumber = new Konva.Text({
+            x: circle.x(),
+            y: circle.y(),
+            text: maxID + 1,
+            fontSize: 30,
+            fontFamily: 'Calibri',
+            fill: 'black'
+
+        })
+
+        convaLayers[findCurLayer()].add(circleNumber);
+        circleNumber.moveToTop();
+
+        stage.batchDraw();
+    });
+
+
+
 
 })
 
