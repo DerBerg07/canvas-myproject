@@ -60,7 +60,7 @@ document.getElementById('delete-button').addEventListener('click', () => {
     mainArr[findCurLayer()].childCircles.splice(mainArr[findCurLayer()].childCircles.indexOf(mainArr[findCurLayer()].childCircles.find(circle => circle.ID === currentShape.id())), 1);
     dropMenuAddNode.style.display = 'none';
     dropmenuNode.style.display = 'none';
-    currentShape.destroy();
+    currentShape.getParent().destroy();
     stage.batchDraw();
 });
 
@@ -76,11 +76,17 @@ document.getElementById('line-button').addEventListener('click', () => {
 
     stage.on('click', function (e) {
         console.log(e.target);
-        if(firstCircle && e.target instanceof Konva.Circle ){
-            console.log("oleg");
-
+        if(firstCircle && (e.target instanceof Konva.Circle || e.target instanceof Konva.Text) ){
+            let Shape;
+            if (e.target.getClassName() === 'Text') {
+                Shape = e.target.getParent().getChildren(function (node) {
+                    return node.getClassName() === 'Circle';
+                })[0];
+            }else {
+                Shape = e.target;
+            }
             let line = new Konva.Line({
-                points: [firstCircle.x(), firstCircle.y(),e.target.x(),e.target.y()],
+                points: [firstCircle.x(), firstCircle.y(),Shape.x(),Shape.y()],
                 stroke: "red",
                 strokeWidth: 2/(findCurLayer() + 1),
                 lineCap: 'round',
@@ -91,7 +97,7 @@ document.getElementById('line-button').addEventListener('click', () => {
             convaLayers[findCurLayer()].add(line);
 
             line.moveToBottom();
-            mainArr[findCurLayer()].childCircles.find(circle => circle.ID === firstCircle.id()).childrenCirclesID.push(e.target.id());
+            mainArr[findCurLayer()].childCircles.find(circle => circle.ID === firstCircle.id()).childrenCirclesID.push(Shape.id());
             firstCircle = null;
 
 
@@ -124,7 +130,7 @@ document.getElementById('colour-button').addEventListener('click', () => {
 //adding element
 document.getElementById('add-button').addEventListener('click', () => {
 
-
+let group = new Konva.Group();
     dropMenuAddNode.style.display = 'none';
     dropmenuNode.style.display = 'none';
 
@@ -156,7 +162,8 @@ document.getElementById('add-button').addEventListener('click', () => {
         if (layer.visible() == true) {
             console.log(layer);
             circle.radius(circle.radius() / (index + 1));
-            layer.add(circle);
+            group.add(circle);
+            layer.add(group);
 
         }
 
@@ -176,22 +183,28 @@ document.getElementById('add-button').addEventListener('click', () => {
             layer: findCurLayer(),
             childrenCirclesID: [],
         })
+
+
+        let Text = new Konva.Text({
+            x: circle.x(),
+            y: circle.y(),
+            text:  circle.id(),
+            fontSize: 30,
+            fontFamily: 'Calibri',
+            fill: 'black'
+        })
+
+        group.add(Text);
+
+        stage.batchDraw();
     })
 
 })
 
 
-stage.on('drop', function (e) {
-    console.log("das");
-})
 
 
-window.addEventListener('click', () => {
 
-})
-stage.on('wheel', e => {
-
-})
 
 
 stage.on('contextmenu', function (e) {
@@ -207,7 +220,14 @@ stage.on('contextmenu', function (e) {
     }
 
 
-    currentShape = e.target;
+    if (e.target.getClassName() === 'Text'){
+        console.log("oleggg");
+        currentShape = e.target.getParent().getChildren(function(node){
+            return node.getClassName() === 'Circle';
+        })[0];
+    }else {
+        currentShape = e.target;
+    }
 
 
     // show menu
@@ -230,22 +250,40 @@ document.getElementById('add-layer').addEventListener('click', () => {
 
 });
 
+
 document.getElementById('add-full').addEventListener('click', () => {
 
-    if (document.getElementById("container").requestFullscreen) {
-        document.getElementById("container").requestFullscreen();
-    } else if (document.getElementById("container").mozRequestFullScreen) { /* Firefox */
-        document.getElementById("container").mozRequestFullScreen();
-    } else if (document.getElementById("container").webkitRequestFullscreen) { /* Chrome, Safari and Opera */
-        document.getElementById("container").webkitRequestFullscreen();
-    } else if (document.getElementById("container").msRequestFullscreen) { /* IE/Edge */
-        document.getElementById("container").msRequestFullscreen();
-    }
-    console.log(width);
-    width = window.innerWidth;
-    height = document.getElementById("container").offsetHeight;
-    console.log(width);
-    stage.width(width);
-    stage.height(height);
+
+        if (document.getElementById("container").requestFullscreen) {
+            document.getElementById("container").requestFullscreen();
+        } else if (document.getElementById("container").mozRequestFullScreen) { /* Firefox */
+            document.getElementById("container").mozRequestFullScreen();
+        } else if (document.getElementById("container").webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+            document.getElementById("container").webkitRequestFullscreen();
+        } else if (document.getElementById("container").msRequestFullscreen) { /* IE/Edge */
+            document.getElementById("container").msRequestFullscreen();
+        }
+
+
+
+    document.getElementById("container").addEventListener("fullscreenchange", function (event) {
+            if (document.fullscreenElement) {
+                width = window.innerWidth;
+                height = document.getElementById("container").offsetHeight;
+                console.log(width);
+                stage.width(width);
+                stage.height(height);
+            } else {
+                width = document.getElementById("container").offsetWidth;
+                height = document.getElementById("container").offsetHeight;
+                stage.width(width);
+                stage.height(height);
+            }
+        });
+
+
+
+
+
 });
 

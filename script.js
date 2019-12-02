@@ -45,6 +45,7 @@ mainArr.forEach(function (layer, index) {
 
     layer.childCircles.forEach(function (circle) {
 
+    let group = new Konva.Group();
 
         circle.childrenCirclesID.forEach(function (ID) {
             let lineDraw = new Konva.Line({
@@ -69,8 +70,22 @@ mainArr.forEach(function (layer, index) {
             fill: "red"
         });
 
-        convaLayers[index].add(CircleDraw);
-        CircleDraw.moveToTop();
+
+        let Text = new Konva.Text({
+            x: circle.posX,
+            y: circle.posY,
+            text: circle.ID,
+            fontSize: 30,
+            fontFamily: 'Calibri',
+            fill: 'black'
+        })
+
+
+        group.add(CircleDraw);
+        group.add(Text);
+
+        convaLayers[index].add(group);
+        group.moveToTop();
 
     })
     convaLayers[index].draw();
