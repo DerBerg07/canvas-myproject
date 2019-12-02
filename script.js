@@ -22,6 +22,7 @@ document.getElementById("container").appendChild(document.getElementById("layer-
 
 let convaLayers = [];
 
+
 //обавляем слои,
 
 function addLayersToStage() {
