@@ -69,7 +69,6 @@ document.getElementById('delete-button').addEventListener('click', () => {
 
 
 document.getElementById('line-button').addEventListener('click', () => {
-    console.log("dadsa");
 
 
     firstCircle = currentShape;
@@ -147,9 +146,9 @@ let group = new Konva.Group();
 
 
     let circle = new Konva.Circle({
-        id: maxID,
-        x: (stage.getPointerPosition().x - stage.x()) / newScaleGlobal,
-        y: (stage.getPointerPosition().y - stage.y()) / newScaleGlobal,
+        id: maxID + 1,
+        x: (stage.getPointerPosition().x - stage.x())/newScaleGlobal,
+        y: (stage.getPointerPosition().y - stage.y())/newScaleGlobal,
         radius: 20,
         fill: '#929229'
     });
@@ -157,17 +156,17 @@ let group = new Konva.Group();
 
 
 
-    //newScaleGlobal
+
     convaLayers.forEach(function (layer, index) {
         if (layer.visible() == true) {
             console.log(layer);
-            circle.radius(circle.radius() / (index + 1));
+
             group.add(circle);
             layer.add(group);
 
         }
 
-    })
+    });
 
 
     currentShape = circle;
