@@ -86,14 +86,14 @@ currentVisibleLayer = 0;
 
 function layerVisability(newScale, oldScale, delta) {
 
-    if(newScale % 1 < oldScale% 1 && delta === -100){
+    if(newScale % 1 < oldScale% 1 && delta < 0){
         console.log("oleg");
         convaLayers[currentVisibleLayer].visible(false);
         currentVisibleLayer++;
         convaLayers[currentVisibleLayer].visible(true);
     }
 
-    if(newScale % 1 > oldScale% 1 && delta === 100){
+    if(newScale % 1 > oldScale% 1 && delta > 0){
         console.log("dima");
         convaLayers[currentVisibleLayer].visible(false);
         currentVisibleLayer--;

@@ -114,7 +114,7 @@ document.getElementById('line-button').addEventListener('click', () => {
 document.getElementById('colour-button').addEventListener('click', () => {
     let colour = document.getElementById('colour').value;
 
-    currentShape.fill('#' + colour);
+    currentShape.fill(colour);
     dropMenuAddNode.style.display = 'none';
     dropmenuNode.style.display = 'none';
     stage.batchDraw();
