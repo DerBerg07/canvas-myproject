@@ -113,6 +113,7 @@ function layerVisability(newScale, oldScale, delta) {
     let child;
 
     if (newScale > 3) {
+
         convaLayers[currentVisibleLayer].visible(false);
         currentVisibleLayer++;
         convaLayers[currentVisibleLayer].visible(true);
@@ -178,36 +179,7 @@ function layerVisability(newScale, oldScale, delta) {
     }
 
 
-    // if(newScale % 1 < oldScale% 1 && delta < 0){
-    //
-    //
-    //
-    //
 
-    //
-    //
-    //
-    //
-    //
-    //
-    // }
-    //
-    // if(newScale % 1 > oldScale% 1 && delta > 0){
-    //     console.log(newScale);
-    //     console.log(oldScale);
-    //     console.log("dima");
-    //
-    //
-    //     convaLayers[currentVisibleLayer].visible(false);
-    //     currentVisibleLayer--;
-    //     convaLayers[currentVisibleLayer].visible(true);
-    //
-    //
-    //
-    //
-    //
-    //
-    // }
 
     document.getElementById('currentLayer').innerText = "Layer" + (findCurLayer() + 1);
 
@@ -228,6 +200,18 @@ stage.on('wheel', e => {
 
     var newScale =
         e.evt.deltaY > 0 ? oldScale - scaleBy : oldScale + scaleBy;
+    console.log(newScale < 0.1);
+    console.log(!convaLayers[findCurLayer() - 1]);
+
+    if(newScale < 1 && !convaLayers[findCurLayer() - 1]){
+        console.log("vihod");
+        return;
+    };
+    if(newScale > 3 && !convaLayers[findCurLayer() + 1]){
+        console.log("vihod");
+        return;
+    };
+
 
     stage.scale({x: newScale, y: newScale});
 
