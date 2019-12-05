@@ -181,6 +181,7 @@ let group = new Konva.Group();
             posY: circle.y(),
             layer: findCurLayer(),
             childrenCirclesID: [],
+            childNextID: null
         })
 
 
@@ -193,6 +194,8 @@ let group = new Konva.Group();
             fill: 'black'
         })
 
+        Text.x(Text.x() - Text.width()/2);
+        Text.y(Text.y() - Text.height()/2);
         group.add(Text);
 
         stage.batchDraw();
@@ -245,7 +248,9 @@ document.getElementById('add-layer').addEventListener('click', () => {
         convaLayers.push(new Konva.Layer);
     mainArr.push({childCircles: []})
     stage.add(convaLayers[(mainArr.length - 1)]);
-    console.log(convaLayers);
+
+    console.log(convaLayers.length);
+    document.getElementById('layres-count').innerText = 'Layers Count - ' + convaLayers.length;
 
 });
 
@@ -283,6 +288,18 @@ document.getElementById('add-full').addEventListener('click', () => {
 
 
 
+
+});
+
+
+
+document.getElementById('connect').addEventListener('click', () => {
+   if(mainArr[findCurLayer() + 1].childCircles[Number(document.getElementById('connect_id').value)]){
+       mainArr[findCurLayer()].childCircles[currentShape.id()].childNextID = Number(document.getElementById('connect_id').value);
+       alert("connected");
+
+       console.log(mainArr[findCurLayer() + 1].childCircles[document.getElementById('connect_id').value].posX);
+   }
 
 });
 
