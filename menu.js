@@ -184,11 +184,11 @@ let group = new Konva.Group();
             childNextID: null
         })
 
-
+        console.log(circle.id() + "кружальце");
         let Text = new Konva.Text({
             x: circle.x(),
             y: circle.y(),
-            text:  circle.id(),
+            text:  circle.id().toString(),
             fontSize: 30,
             fontFamily: 'Calibri',
             fill: 'black'

@@ -71,7 +71,7 @@ mainArr.forEach(function (layer, index) {
         let Text = new Konva.Text({
             x: circle.posX ,
             y: circle.posY ,
-            text: circle.ID,
+            text: circle.ID.toString(),
             fontSize: 30,
             fontFamily: 'Calibri',
             fill: 'black'
