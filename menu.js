@@ -4,6 +4,8 @@ let dropMenuAddNode = document.getElementById('menu-add');
 let dragging = false;
 let firstCircle;
 let secondCircle;
+let lineArr = [];
+let linedrag = false;
 let findCurLayer = function () {
     let trueLayer;
     convaLayers.forEach(function (layer, index) {
@@ -70,32 +72,51 @@ document.getElementById('delete-button').addEventListener('click', () => {
 
 document.getElementById('line-button').addEventListener('click', () => {
 
+    linedrag = true;
 
     firstCircle = currentShape;
 
+    lineArr.push(
+        new Konva.Line({
+            stroke: "red",
+            strokeWidth: 2/(findCurLayer() + 1),
+            lineCap: 'round',
+            lineJoin: 'round'
+
+        })
+    );
+    convaLayers[findCurLayer()].add(lineArr[lineArr.length - 1]);
+
+    stage.on('mousemove', function () {
+
+        if(linedrag){
+            lineArr[lineArr.length - 1].moveToBottom();
+            lineArr[lineArr.length - 1].points([firstCircle.x(), firstCircle.y(), (stage.getPointerPosition().x - stage.x())/newScaleGlobal,(stage.getPointerPosition().y - stage.y())/newScaleGlobal]);
+
+            stage.batchDraw();
+        };
+
+    });
+
     stage.on('click', function (e) {
+
         console.log(e.target);
         if(firstCircle && (e.target instanceof Konva.Circle || e.target instanceof Konva.Text) ){
+            linedrag = false;
             let Shape;
             if (e.target.getClassName() === 'Text') {
                 Shape = e.target.getParent().getChildren(function (node) {
                     return node.getClassName() === 'Circle';
                 })[0];
+
             }else {
                 Shape = e.target;
             }
-            let line = new Konva.Line({
-                points: [firstCircle.x(), firstCircle.y(),Shape.x(),Shape.y()],
-                stroke: "red",
-                strokeWidth: 2/(findCurLayer() + 1),
-                lineCap: 'round',
-                lineJoin: 'round'
 
-            })
+                lineArr[lineArr.length - 1].points([firstCircle.x(), firstCircle.y(),Shape.x(),Shape.y()]);
 
-            convaLayers[findCurLayer()].add(line);
 
-            line.moveToBottom();
+            lineArr[lineArr.length - 1].moveToBottom();
             mainArr[findCurLayer()].childCircles.find(circle => circle.ID === firstCircle.id()).childrenCirclesID.push(Shape.id());
             firstCircle = null;
 
