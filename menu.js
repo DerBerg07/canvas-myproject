@@ -313,6 +313,40 @@ document.getElementById('add-full').addEventListener('click', () => {
 });
 
 
+document.getElementById('add-full-window').addEventListener('click', () => {
+
+    console.log(document.getElementById('container').style.getPropertyValue('position'));
+
+    if(document.getElementById('container').style.getPropertyValue("position") !== 'fixed'){
+        document.getElementById('container').style.position = 'fixed';
+        document.getElementById('container').style.width = '100%';
+        document.getElementById('container').style.height = '100%';
+        width = window.innerWidth;
+        height = document.getElementById("container").offsetHeight;
+        console.log(width);
+        stage.width(width);
+        stage.height(height);
+        console.log("full window +");
+    }else{
+        document.getElementById('container').style.position = 'absolute';
+        document.getElementById('container').style.width = nativeSize.x + 'px';
+        document.getElementById('container').style.height = nativeSize.y + 'px';
+        width = document.getElementById("container").offsetWidth;
+        height = document.getElementById("container").offsetHeight;
+        console.log(width);
+        stage.width(width);
+        stage.height(height);
+        console.log("full window - ");
+    }
+
+
+
+})
+
+
+
+
+
 
 document.getElementById('connect').addEventListener('click', () => {
    if(mainArr[findCurLayer() + 1].childCircles[Number(document.getElementById('connect_id').value)]){
