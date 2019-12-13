@@ -75,7 +75,7 @@ stage.dragBoundFunc(function(pos){
 
     })
 
-    console.log(ogranich_x);
+    // console.log(ogranich_x);
     var newY;
     var newX;
     if(pos.x <(0 - ogranich_x[0])){
@@ -201,7 +201,7 @@ function layerVisability(newScale) {
 
     if (newScale > 3) {
 
-
+        console.log(stage.x());
 
         convaLayers[currentVisibleLayer].visible(false);
         currentVisibleLayer++;
@@ -248,8 +248,48 @@ function layerVisability(newScale) {
         convaLayers[currentVisibleLayer].visible(false);
         currentVisibleLayer--;
         convaLayers[currentVisibleLayer].visible(true);
+
+
+        let distance = stage.width();
+
+
+        mainArr[currentVisibleLayer + 1].childCircles.forEach(function (circle) {
+            if ((Math.abs((stage.getPointerPosition().y - stage.y()) / newScaleGlobal - circle.posY) + Math.abs((stage.getPointerPosition().x - stage.x()) / newScaleGlobal - circle.posX)) < distance) {
+                distance = Math.abs((stage.getPointerPosition().y - stage.y()) / newScaleGlobal - circle.posY) + Math.abs((stage.getPointerPosition().x - stage.x()) / newScaleGlobal - circle.posX);
+                parent = circle;
+                child = mainArr[currentVisibleLayer].childCircles.find(circle => circle.childNextID === parent.ID).ID;
+
+            }
+        });
+
+
+
+        console.log(parent);
         stage.scale({x: 3, y: 3})
         newScaleGlobal = 3;
+        if (child !== null) {
+
+
+            console.log(currentVisibleLayer + " Layer");
+            console.log(mainArr[currentVisibleLayer].childCircles.find(circle => circle.ID == child).ID + " circle");
+            console.log(child + "к нему магнит");
+            console.log("going");
+
+
+
+            stage.x(((stage.getPointerPosition().x - mainArr[currentVisibleLayer].childCircles.find(circle => circle.ID === child).posX*3)));
+            stage.y(((stage.getPointerPosition().y - mainArr[currentVisibleLayer].childCircles.find(circle => circle.ID === child).posY*3)));
+            console.log(stage.getPointerPosition().x + " мыша");
+            console.log(mainArr[currentVisibleLayer].childCircles.find(circle => circle.ID === child).posX + " шар");
+            console.log(stage.x());
+        }
+
+
+
+
+
+
+
 
 
 
