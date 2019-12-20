@@ -304,7 +304,7 @@ function layerVisability(newScale) {
 }
 
 //скейл колесиком
-var scaleBy = 0.1;
+var scaleBy = 0.6;
 
 stage.on('wheel', e => {
     e.evt.preventDefault();
