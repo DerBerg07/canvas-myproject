@@ -1,8 +1,5 @@
 'use strict';
-let width = document.getElementById("container").offsetWidth;
-let height = document.getElementById("container").offsetHeight;
-let newPosGlobal = {x: 0, y: 0};
-let newScaleGlobal = 1;
+
 let nativeSize = {
     x: 1200,
     y: 700
@@ -21,6 +18,7 @@ let stage = new Konva.Stage({
 
 
 document.getElementById("container").appendChild(document.getElementById("menu"));
+document.getElementById("container").appendChild(document.getElementById("menu-cancel"));
 document.getElementById("container").appendChild(document.getElementById("menu-add"));
 document.getElementById("container").appendChild(document.getElementById("layer-menu"));
 
@@ -257,14 +255,17 @@ function layerVisability(newScale) {
             if ((Math.abs((stage.getPointerPosition().y - stage.y()) / newScaleGlobal - circle.posY) + Math.abs((stage.getPointerPosition().x - stage.x()) / newScaleGlobal - circle.posX)) < distance) {
                 distance = Math.abs((stage.getPointerPosition().y - stage.y()) / newScaleGlobal - circle.posY) + Math.abs((stage.getPointerPosition().x - stage.x()) / newScaleGlobal - circle.posX);
                 parent = circle;
-                child = mainArr[currentVisibleLayer].childCircles.find(circle => circle.childNextID === parent.ID).ID;
+
+                if(mainArr[currentVisibleLayer].childCircles.find(circle => circle.childNextID === parent.ID)){
+                    child = mainArr[currentVisibleLayer].childCircles.find(circle => circle.childNextID === parent.ID).ID;
+                }else {child = null;}
 
             }
         });
 
 
 
-        console.log(parent);
+        console.log(child + "dsdasdsasadasdsa");
         stage.scale({x: 3, y: 3})
         newScaleGlobal = 3;
         if (child !== null) {

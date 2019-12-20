@@ -1,11 +1,10 @@
 let currentShape;
 let dropmenuNode = document.getElementById('menu');
 let dropMenuAddNode = document.getElementById('menu-add');
+let dropMenuCancelLine = document.getElementById('menu-cancel');
 let dragging = false;
 let firstCircle;
-let secondCircle;
 let lineArr = [];
-let linedrag = false;
 let findCurLayer = function () {
     let trueLayer;
     convaLayers.forEach(function (layer, index) {
@@ -23,11 +22,11 @@ console.log(convaLayers[0].getChildren());
 
 
 stage.on('click', e => {
-
+    console.log("click");
 
     dropMenuAddNode.style.display = 'none';
     dropmenuNode.style.display = 'none';
-})
+});
 
 
 document.getElementById('delete-button').addEventListener('click', () => {
@@ -62,11 +61,78 @@ document.getElementById('delete-button').addEventListener('click', () => {
     mainArr[findCurLayer()].childCircles.splice(mainArr[findCurLayer()].childCircles.indexOf(mainArr[findCurLayer()].childCircles.find(circle => circle.ID === currentShape.id())), 1);
     dropMenuAddNode.style.display = 'none';
     dropmenuNode.style.display = 'none';
+    dropMenuCancelLine.style.display = 'none';
     currentShape.getParent().destroy();
     stage.batchDraw();
 });
 
 
+
+document.getElementById('canceleLine').addEventListener('click', () => {
+    dropMenuCancelLine.style.display = 'none';
+
+    if(currentShape.getClassName() === 'Line' && linedrag === false){
+        console.log(mainArr[findCurLayer()].childCircles);
+        let LineCircles = [];
+       convaLayers[findCurLayer()].getChildren().forEach(group => {
+           group.getChildren(function (node) {
+               return node.getClassName() === 'Circle';
+           }).forEach(circle => {
+               if(circle){
+                   console.log(currentShape.points());
+                   if((currentShape.points()[0] === circle.x() && currentShape.points()[1] === circle.y()) || (currentShape.points()[2] === circle.x() && currentShape.points()[3] === circle.y()) ){
+                       LineCircles.push(circle);
+
+                   }
+               }
+           });
+        });
+
+
+       // circle.childrenCirclesID.splice(circle.childrenCirclesID.indexOf(idDel), 1);
+        console.log(LineCircles);
+
+        mainArr[findCurLayer()].childCircles.forEach(circle => {
+                if(circle.ID === LineCircles[0].id()){
+                    console.log("1");
+                    circle.childrenCirclesID.forEach(id => {
+                        if(id === LineCircles[1].id()){
+                            console.log("2");
+                            console.log(circle);
+                            circle.childrenCirclesID.splice(circle.childrenCirclesID.indexOf(id), 1);
+                            console.log(circle);
+                        }
+
+                    })
+                }else if(circle.ID === LineCircles[1].id()){
+                    console.log("11");
+                    circle.childrenCirclesID.forEach(id => {
+                        if(id === LineCircles[0].id()){
+                            console.log("22");
+                            console.log(circle);
+                            circle.childrenCirclesID.splice(circle.childrenCirclesID.indexOf(id), 1);
+                            console.log(circle);
+                        }
+
+                    })
+                }
+
+
+            });
+        currentShape.remove();
+        stage.batchDraw();
+        return;
+
+    }
+
+    console.log("work");
+    lineArr[lineArr.length - 1].remove();
+    lineArr.splice([lineArr.length - 1], 1);
+    linedrag = false;
+    firstCircle = null;
+    stage.batchDraw();
+
+})
 
 
 
@@ -130,6 +196,7 @@ document.getElementById('line-button').addEventListener('click', () => {
 
     dropMenuAddNode.style.display = 'none';
     dropmenuNode.style.display = 'none';
+    dropMenuCancelLine.style.display = 'none';
 
 });
 
@@ -139,10 +206,10 @@ document.getElementById('line-button').addEventListener('click', () => {
 
 document.getElementById('colour-button').addEventListener('click', () => {
     let colour = document.getElementById('colour').value;
-
     currentShape.fill(colour);
     dropMenuAddNode.style.display = 'none';
     dropmenuNode.style.display = 'none';
+    dropMenuCancelLine.style.display = 'none';
     stage.batchDraw();
 })
 
@@ -153,6 +220,7 @@ document.getElementById('add-button').addEventListener('click', () => {
 let group = new Konva.Group();
     dropMenuAddNode.style.display = 'none';
     dropmenuNode.style.display = 'none';
+    dropMenuCancelLine.style.display = 'none';
 
     let maxID = -1;
 
@@ -231,14 +299,29 @@ let group = new Konva.Group();
 
 
 stage.on('contextmenu', function (e) {
-    // prevent default behavior
+    console.log(linedrag);
+
     e.evt.preventDefault();
+    if(linedrag === true){
+
+        dropMenuCancelLine.style.display = 'initial';
+        var containerRect = stage.container().getBoundingClientRect();
+        dropMenuCancelLine.style.top = containerRect.top + stage.getPointerPosition().y + 4 + 'px';
+        dropMenuCancelLine.style.left = containerRect.left + stage.getPointerPosition().x + 4 + 'px';
+    return;
+
+}
+
+
+    // prevent default behavior
+
     if (e.target === stage) {
         // if we are on empty place of the stage we will do nothing
         dropMenuAddNode.style.display = 'initial';
         var containerRect = stage.container().getBoundingClientRect();
         dropMenuAddNode.style.top = containerRect.top + stage.getPointerPosition().y + 4 + 'px';
         dropMenuAddNode.style.left = containerRect.left + stage.getPointerPosition().x + 4 + 'px';
+        console.log("empty");
         return;
     }
 
@@ -250,8 +333,18 @@ stage.on('contextmenu', function (e) {
         })[0];
     }else {
         currentShape = e.target;
+        dropMenuCancelLine.style.display = 'initial';
+        var containerRect = stage.container().getBoundingClientRect();
+        dropMenuCancelLine.style.top = containerRect.top + stage.getPointerPosition().y + 4 + 'px';
+        dropMenuCancelLine.style.left = containerRect.left + stage.getPointerPosition().x + 4 + 'px';
+        return;
     }
 
+    if (e.target.getClassName() === 'Line'){
+        console.log("lineFOUND");
+        currentShape = e.target;
+
+    }
 
     // show menu
     dropmenuNode.style.display = 'initial';
