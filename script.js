@@ -30,7 +30,7 @@ let convaLayers = [];
 console.log(stage.dragDistance());
 
 stage.dragBoundFunc(function(pos){
-
+let ogranichenie = 100;
     var ogranich_x = [];
     var ogranich_y = [];
     mainArr[findCurLayer()].childCircles.forEach(function (circle) {
@@ -73,37 +73,35 @@ stage.dragBoundFunc(function(pos){
 
     })
 
-    // console.log(ogranich_x);
+
     var newY;
     var newX;
-    if(pos.x <(0 - ogranich_x[0])){
+    if(pos.x <(0 + ogranichenie - ogranich_x[0])){
 
-        newX =  (0 - ogranich_x[0])
-    }else if(pos.x >(width - ogranich_x[1] )){
+        newX =  (0 + ogranichenie - ogranich_x[0])
+    }else if(pos.x >(width - ogranichenie - ogranich_x[1] )){
 
 
-        newX =  (width - ogranich_x[1]);
+        newX =  (width- ogranichenie - ogranich_x[1]);
     }else{
 
         newX = pos.x
 
     };
+    console.log(newX);
+    if(pos.y <(0 + ogranichenie - ogranich_y[0])){
 
-
-    if(pos.y <(0 - ogranich_y[0])){
-
-        newY =  (0 - ogranich_y[0])
-    }else if(pos.y >(height - ogranich_y[1] )){
-
-
-        newY = (height - ogranich_y[1]);
+        newY =  ( 0 + ogranichenie - ogranich_y[0])
+    }else if(pos.y >(height - 100 - ogranich_y[1] )){
+        newY = (height - 100 - ogranich_y[1]);
     }else{
-
         newY = pos.y
-
     };
+    console.log(newY);
+    console.log();
     return {
-        x: newX,
+
+        x: newX ,
         y: newY
 
     };
