@@ -30,7 +30,7 @@ let convaLayers = [];
 console.log(stage.dragDistance());
 
 stage.dragBoundFunc(function(pos){
-let ogranichenie = 100;
+let ogranichenie = 300;
     var ogranich_x = [];
     var ogranich_y = [];
     mainArr[findCurLayer()].childCircles.forEach(function (circle) {
@@ -191,7 +191,6 @@ document.getElementById('layres-count').innerText = 'Layers Count - ' + convaLay
 
 function layerVisability(newScale) {
 
-
     let parent;
     let child;
 
@@ -206,7 +205,6 @@ function layerVisability(newScale) {
 
         let distance = stage.width();
 
-
         mainArr[currentVisibleLayer - 1].childCircles.forEach(function (circle) {
             if ((Math.abs((stage.getPointerPosition().y - stage.y()) / newScaleGlobal - circle.posY) + Math.abs((stage.getPointerPosition().x - stage.x()) / newScaleGlobal - circle.posX)) < distance) {
                 distance = Math.abs((stage.getPointerPosition().y - stage.y()) / newScaleGlobal - circle.posY) + Math.abs((stage.getPointerPosition().x - stage.x()) / newScaleGlobal - circle.posX);
@@ -214,8 +212,6 @@ function layerVisability(newScale) {
                 child = circle.childNextID;
             }
         });
-
-
 
         console.log(parent);
 
@@ -233,21 +229,15 @@ function layerVisability(newScale) {
         stage.scale({x: 1, y: 1});
         newScaleGlobal = 1;
 
-
-
     }
 
-
     if (newScale < 1) {
-
 
         convaLayers[currentVisibleLayer].visible(false);
         currentVisibleLayer--;
         convaLayers[currentVisibleLayer].visible(true);
 
-
         let distance = stage.width();
-
 
         mainArr[currentVisibleLayer + 1].childCircles.forEach(function (circle) {
             if ((Math.abs((stage.getPointerPosition().y - stage.y()) / newScaleGlobal - circle.posY) + Math.abs((stage.getPointerPosition().x - stage.x()) / newScaleGlobal - circle.posX)) < distance) {
@@ -261,40 +251,13 @@ function layerVisability(newScale) {
             }
         });
 
-
-
-        console.log(child + "dsdasdsasadasdsa");
         stage.scale({x: 3, y: 3})
         newScaleGlobal = 3;
         if (child !== null) {
-
-
-            console.log(currentVisibleLayer + " Layer");
-            console.log(mainArr[currentVisibleLayer].childCircles.find(circle => circle.ID == child).ID + " circle");
-            console.log(child + "к нему магнит");
-            console.log("going");
-
-
-
             stage.x(((stage.getPointerPosition().x - mainArr[currentVisibleLayer].childCircles.find(circle => circle.ID === child).posX*3)));
             stage.y(((stage.getPointerPosition().y - mainArr[currentVisibleLayer].childCircles.find(circle => circle.ID === child).posY*3)));
-            console.log(stage.getPointerPosition().x + " мыша");
-            console.log(mainArr[currentVisibleLayer].childCircles.find(circle => circle.ID === child).posX + " шар");
-            console.log(stage.x());
         }
-
-
-
-
-
-
-
-
-
-
-
     }
-
 
     document.getElementById('currentLayer').innerText = "Layer" + (findCurLayer() + 1);
 
@@ -320,12 +283,12 @@ stage.on('wheel', e => {
         console.log("vihod");
         return;
     }
-    ;
+
     if (newScale > 3 && !convaLayers[findCurLayer() + 1]) {
         console.log("vihod");
         return;
     }
-    ;
+
 
 
     stage.scale({x: newScale, y: newScale});

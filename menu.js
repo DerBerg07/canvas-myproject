@@ -7,7 +7,7 @@ let firstCircle;
 let lineArr = [];
 let findCurLayer = function () {
     let trueLayer;
-    convaLayers.forEach(function (layer, index) {
+    app.convaLayers.forEach(function (layer, index) {
         if (layer.visible() == true) {
 
             trueLayer = index;
@@ -18,15 +18,7 @@ let findCurLayer = function () {
 };
 
 
-console.log(convaLayers[0].getChildren());
 
-
-stage.on('click', e => {
-    console.log("click");
-
-    dropMenuAddNode.style.display = 'none';
-    dropmenuNode.style.display = 'none';
-});
 
 
 document.getElementById('delete-button').addEventListener('click', () => {
@@ -246,7 +238,7 @@ let group = new Konva.Group();
 
 
 
-    convaLayers.forEach(function (layer, index) {
+    app.convaLayers.forEach(function (layer, index) {
         if (layer.visible() == true) {
             console.log(layer);
 
@@ -298,60 +290,6 @@ let group = new Konva.Group();
 
 
 
-stage.on('contextmenu', function (e) {
-    console.log(linedrag);
-
-    e.evt.preventDefault();
-    if(linedrag === true){
-
-        dropMenuCancelLine.style.display = 'initial';
-        var containerRect = stage.container().getBoundingClientRect();
-        dropMenuCancelLine.style.top = containerRect.top + stage.getPointerPosition().y + 4 + 'px';
-        dropMenuCancelLine.style.left = containerRect.left + stage.getPointerPosition().x + 4 + 'px';
-    return;
-
-}
-
-
-    // prevent default behavior
-
-    if (e.target === stage) {
-        // if we are on empty place of the stage we will do nothing
-        dropMenuAddNode.style.display = 'initial';
-        var containerRect = stage.container().getBoundingClientRect();
-        dropMenuAddNode.style.top = containerRect.top + stage.getPointerPosition().y + 4 + 'px';
-        dropMenuAddNode.style.left = containerRect.left + stage.getPointerPosition().x + 4 + 'px';
-        console.log("empty");
-        return;
-    }
-
-
-    if (e.target.getClassName() === 'Text'){
-        console.log("oleggg");
-        currentShape = e.target.getParent().getChildren(function(node){
-            return node.getClassName() === 'Circle';
-        })[0];
-    }else {
-        currentShape = e.target;
-        dropMenuCancelLine.style.display = 'initial';
-        var containerRect = stage.container().getBoundingClientRect();
-        dropMenuCancelLine.style.top = containerRect.top + stage.getPointerPosition().y + 4 + 'px';
-        dropMenuCancelLine.style.left = containerRect.left + stage.getPointerPosition().x + 4 + 'px';
-        return;
-    }
-
-    if (e.target.getClassName() === 'Line'){
-        console.log("lineFOUND");
-        currentShape = e.target;
-
-    }
-
-    // show menu
-    dropmenuNode.style.display = 'initial';
-    var containerRect = stage.container().getBoundingClientRect();
-    dropmenuNode.style.top = containerRect.top + stage.getPointerPosition().y + 4 + 'px';
-    dropmenuNode.style.left = containerRect.left + stage.getPointerPosition().x + 4 + 'px';
-});
 
 
 
@@ -409,28 +347,29 @@ document.getElementById('add-full').addEventListener('click', () => {
 document.getElementById('add-full-window').addEventListener('click', () => {
 
     console.log(document.getElementById('container').style.getPropertyValue('position'));
-
-    if(document.getElementById('container').style.getPropertyValue("position") !== 'fixed'){
-        document.getElementById('container').style.position = 'fixed';
-        document.getElementById('container').style.width = '100%';
-        document.getElementById('container').style.height = '100%';
-        width = window.innerWidth;
-        height = document.getElementById("container").offsetHeight;
-        console.log(width);
-        stage.width(width);
-        stage.height(height);
-        console.log("full window +");
-    }else{
-        document.getElementById('container').style.position = 'absolute';
-        document.getElementById('container').style.width = nativeSize.x + 'px';
-        document.getElementById('container').style.height = nativeSize.y + 'px';
-        width = document.getElementById("container").offsetWidth;
-        height = document.getElementById("container").offsetHeight;
-        console.log(width);
-        stage.width(width);
-        stage.height(height);
-        console.log("full window - ");
-    }
+    let container =document.getElementById('container');
+    container.classList.toggle('fullscreen');
+    // if(document.getElementById('container').style.getPropertyValue("position") !== 'fixed'){
+    //     // document.getElementById('container').style.position = 'fixed';
+    //     document.getElementById('container').style.width = '100%';
+    //     document.getElementById('container').style.height = '100%';
+    //     width = window.innerWidth;
+    //     height = document.getElementById("container").offsetHeight;
+    //     console.log(width);
+    //     stage.width(width);
+    //     stage.height(height);
+    //     console.log("full window +");
+    // }else{
+    //     // document.getElementById('container').style.position = 'absolute';
+    //     document.getElementById('container').style.width = nativeSize.x + 'px';
+    //     document.getElementById('container').style.height = nativeSize.y + 'px';
+    //     width = document.getElementById("container").offsetWidth;
+    //     height = document.getElementById("container").offsetHeight;
+    //     console.log(width);
+    //     stage.width(width);
+    //     stage.height(height);
+    //     console.log("full window - ");
+    // }
 
 
 

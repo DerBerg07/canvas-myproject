@@ -9,9 +9,13 @@ body {
     background-color: #00caf0;
     width: 1200px;
     height: 700px;
+    margin: 0 auto;
+    /*position: absolute;*/
+}
 
-    position: absolute;
-
+.fullscreen{
+    width: 100% !important;
+    height: 100% !important;
 }
 
 #menu {
@@ -20,6 +24,7 @@ body {
     background-color: white;
     box-shadow: 0 0 5px grey;
     border-radius: 3px;
+
 }
 
 #menu button {
@@ -60,9 +65,13 @@ body {
     border-radius: 3px;
 }
 #layer-menu {
+    margin: 10px 0 0 10px;
+    background-color: yellow;
     position: absolute;
-    left: 10px;
-    top: 0px;
+    top: 0;
+    border: 2px solid black;
+    border-radius: 10px;
+    padding: 10px;
 }
 #layer-menu button{
     width: 100%;
@@ -90,4 +99,7 @@ body {
 
 #menu-cancel button:hover {
     background-color: lightgray;
+}
+.button-style{
+
 }
