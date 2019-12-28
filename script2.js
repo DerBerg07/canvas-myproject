@@ -27,16 +27,12 @@ window.onload = function () {
                 y: 700
             };
 
-
-
             this.setLeyers();
             this.addLayersToStage();
             this.currentVisibleLayer = 0;
 
             mainArr.forEach(function (layer, index) {
-
                 layer.childCircles.forEach(function (circle) {
-
                     let group = new Konva.Group();
 
                     circle.childrenCirclesID.forEach(function (ID) {
@@ -92,15 +88,10 @@ window.onload = function () {
                 var y = mousePos.y;
 
             });
-            // let layres_c= document.getElementById('layres-count');
-            // console.log(layres_c);
-            console.log(this.container);
-            console.log(this.container.querySelector('#layres-count'));
             this.container.querySelector('#layres-count').innerText = 'Layers Count - ' + app.convaLayers.length;
-
             this.stage.on('wheel', e => {
                 e.evt.preventDefault();
-                var oldScale = stage.scaleX();
+                var oldScale = app.stage.scaleX();
 
                 var mousePointTo = {
                     x: app.stage.getPointerPosition().x / oldScale - app.stage.x() / oldScale,
@@ -108,14 +99,14 @@ window.onload = function () {
                 };
 
                 var newScale =
-                    e.evt.deltaY > 0 ? oldScale - scaleBy : oldScale + scaleBy;
+                    e.evt.deltaY > 0 ? oldScale - app.scaleBy : oldScale + app.scaleBy;
 
-                if (newScale < 1 && !convaLayers[findCurLayer() - 1]) {
+                if (newScale < 1 && !app.convaLayers[findCurLayer() - 1]) {
                     console.log("vihod");
                     return;
                 }
 
-                if (newScale > 3 && !convaLayers[findCurLayer() + 1]) {
+                if (newScale > 3 && !app.convaLayers[findCurLayer() + 1]) {
                     console.log("vihod");
                     return;
                 }
@@ -138,14 +129,13 @@ window.onload = function () {
 
                 newScaleGlobal = newScale;
                 newPosGlobal = newPos;
-                layerVisability(newScale, oldScale, e.evt.deltaY);
+                this.layerVisability(newScale, oldScale, e.evt.deltaY);
 
             });
             this.stage.on('click', e => {
                 dropMenuAddNode.style.display = 'none';
                 dropmenuNode.style.display = 'none';
             });
-
             this.stage.on('contextmenu', function (e) {
                 e.evt.preventDefault();
                 if (linedrag === true) {
@@ -198,7 +188,6 @@ window.onload = function () {
                 dropmenuNode.style.top = containerRect.top + stage.getPointerPosition().y + 4 + 'px';
                 dropmenuNode.style.left = containerRect.left + stage.getPointerPosition().x + 4 + 'px';
             });
-
         },
 
         setLeyers: function () {
@@ -290,6 +279,76 @@ window.onload = function () {
             }
         },
         layerVisability: function (newScale) {
+            let parent;
+            let child;
+
+            if (newScale > 3) {
+
+                console.log(stage.x());
+
+                convaLayers[currentVisibleLayer].visible(false);
+                currentVisibleLayer++;
+                convaLayers[currentVisibleLayer].visible(true);
+
+
+                let distance = stage.width();
+
+                mainArr[currentVisibleLayer - 1].childCircles.forEach(function (circle) {
+                    if ((Math.abs((stage.getPointerPosition().y - stage.y()) / newScaleGlobal - circle.posY) + Math.abs((stage.getPointerPosition().x - stage.x()) / newScaleGlobal - circle.posX)) < distance) {
+                        distance = Math.abs((stage.getPointerPosition().y - stage.y()) / newScaleGlobal - circle.posY) + Math.abs((stage.getPointerPosition().x - stage.x()) / newScaleGlobal - circle.posX);
+                        parent = circle;
+                        child = circle.childNextID;
+                    }
+                });
+
+                console.log(parent);
+
+                if (child !== null) {
+                    console.log(currentVisibleLayer + " Layer");
+                    console.log(mainArr[currentVisibleLayer].childCircles.find(circle => circle.ID == child) + " circle");
+                    console.log(child);
+                    console.log("going");
+                    stage.x((stage.getPointerPosition().x - mainArr[currentVisibleLayer].childCircles.find(circle => circle.ID === child).posX));
+                    stage.y((stage.getPointerPosition().y - mainArr[currentVisibleLayer].childCircles.find(circle => circle.ID === child).posY));
+
+                }
+
+
+                stage.scale({x: 1, y: 1});
+                newScaleGlobal = 1;
+
+            }
+
+            if (newScale < 1) {
+
+                convaLayers[currentVisibleLayer].visible(false);
+                currentVisibleLayer--;
+                convaLayers[currentVisibleLayer].visible(true);
+
+                let distance = stage.width();
+
+                mainArr[currentVisibleLayer + 1].childCircles.forEach(function (circle) {
+                    if ((Math.abs((stage.getPointerPosition().y - stage.y()) / newScaleGlobal - circle.posY) + Math.abs((stage.getPointerPosition().x - stage.x()) / newScaleGlobal - circle.posX)) < distance) {
+                        distance = Math.abs((stage.getPointerPosition().y - stage.y()) / newScaleGlobal - circle.posY) + Math.abs((stage.getPointerPosition().x - stage.x()) / newScaleGlobal - circle.posX);
+                        parent = circle;
+
+                        if(mainArr[currentVisibleLayer].childCircles.find(circle => circle.childNextID === parent.ID)){
+                            child = mainArr[currentVisibleLayer].childCircles.find(circle => circle.childNextID === parent.ID).ID;
+                        }else {child = null;}
+
+                    }
+                });
+
+                stage.scale({x: 3, y: 3})
+                newScaleGlobal = 3;
+                if (child !== null) {
+                    stage.x(((stage.getPointerPosition().x - mainArr[currentVisibleLayer].childCircles.find(circle => circle.ID === child).posX*3)));
+                    stage.y(((stage.getPointerPosition().y - mainArr[currentVisibleLayer].childCircles.find(circle => circle.ID === child).posY*3)));
+                }
+            }
+
+            document.getElementById('currentLayer').innerText = "Layer" + (findCurLayer() + 1);
+
 
         }
     };
@@ -366,7 +425,6 @@ window.onload = function () {
         dropMenuCancelLine.style.display = 'none';
 
         if(currentShape.getClassName() === 'Line' && linedrag === false){
-            console.log(mainArr[findCurLayer()].childCircles);
             let LineCircles = [];
             convaLayers[findCurLayer()].getChildren().forEach(group => {
                 group.getChildren(function (node) {
