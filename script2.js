@@ -35,6 +35,7 @@ let app = {
 
         this.setLeyers();
         this.addLayersToStage();
+        this.convaLayers[0].visible(true);
         this.currentVisibleLayer = 0;
 
         mainArr.forEach(function (layer, index) {
@@ -346,7 +347,7 @@ let app = {
 
             }
 
-            console.log("work");
+
             lineArr[lineArr.length - 1].remove();
             lineArr.splice([lineArr.length - 1], 1);
             linedrag = false;
@@ -450,8 +451,8 @@ let app = {
 
             let circle = new Konva.Circle({
                 id: maxID + 1,
-                x: (stage.getPointerPosition().x - stage.x()) / newScaleGlobal,
-                y: (stage.getPointerPosition().y - stage.y()) / newScaleGlobal,
+                x: (this.stage.getPointerPosition().x - this.stage.x()) / newScaleGlobal,
+                y: (this.stage.getPointerPosition().y - this.stage.y()) / newScaleGlobal,
                 radius: 20,
                 fill: '#929229'
             });
@@ -498,7 +499,7 @@ let app = {
                 Text.y(Text.y() - Text.height() / 2);
                 group.add(Text);
 
-                stage.batchDraw();
+                this.stage.batchDraw();
             })
 
         })
@@ -509,7 +510,7 @@ let app = {
             let ogranichenie = 300;
             var ogranich_x = [];
             var ogranich_y = [];
-            console.log(mainArr[this.findCurLayer()]);
+                console.log(mainArr[this.findCurLayer()]);
             mainArr[this.findCurLayer()].childCircles.forEach(function (circle) {
                 if (ogranich_x[0]) {
                     if (circle.posX > ogranich_x[0]) {
