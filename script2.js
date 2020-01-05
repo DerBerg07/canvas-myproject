@@ -655,7 +655,7 @@ let app = {
                     } else {
                         child = null;
                     }
-                    console.log(child + "cучий ребенок");
+
                 }
             });
 
