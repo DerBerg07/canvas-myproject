@@ -145,10 +145,12 @@ let app = {
         this.stage.on('click', e => {
             app.dropMenuAddNode.style.display = 'none';
             app.dropmenuNode.style.display = 'none';
+            app.dropMenuCancelLine.style.display = 'none';
         });
         this.stage.on('contextmenu', function (e) {
-            console.log(linedrag);
+
             e.evt.preventDefault();
+
             if (app.linedrag === true) {
                 app.dropMenuCancelLine.style.display = 'initial';
                 var containerRect = app.stage.container().getBoundingClientRect();
@@ -166,7 +168,7 @@ let app = {
                 var containerRect = app.stage.container().getBoundingClientRect();
                 app.dropMenuAddNode.style.top = containerRect.top + app.stage.getPointerPosition().y + 4 + 'px';
                 app.dropMenuAddNode.style.left = containerRect.left + app.stage.getPointerPosition().x + 4 + 'px';
-                console.log("empty");
+
                 return;
             }
 
@@ -175,9 +177,9 @@ let app = {
                 app.currentShape = e.target.getParent().getChildren(function (node) {
                     return node.getClassName() === 'Circle';
                 })[0];
-                console.log(app.currentShape);
+
             } else {
-                console.log(e.target);
+
                 app.currentShape = e.target;
                 app.dropMenuCancelLine.style.display = 'initial';
                 var containerRect = app.stage.container().getBoundingClientRect();
@@ -189,7 +191,6 @@ let app = {
 
             // show menu
             app.dropmenuNode.style.display = 'initial';
-            console.log(app);
             var containerRect = app.stage.container().getBoundingClientRect();
             app.dropmenuNode.style.top = containerRect.top + app.stage.getPointerPosition().y + 4 + 'px';
             app.dropmenuNode.style.left = containerRect.left + app.stage.getPointerPosition().x + 4 + 'px';
@@ -226,14 +227,13 @@ let app = {
                 if (document.fullscreenElement) {
                     width = window.innerWidth;
                     height = document.getElementById("container").offsetHeight;
-                    console.log(width);
                     app.stage.width(width);
                     app.stage.height(height);
                 } else {
                     width = document.getElementById("container").offsetWidth;
                     height = document.getElementById("container").offsetHeight;
-                    stage.width(width);
-                    stage.height(height);
+                    app.stage.width(width);
+                    app.stage.height(height);
                 }
             });
         });
@@ -256,7 +256,7 @@ let app = {
 
         });
         document.getElementById('delete-button').addEventListener('click', () => {
-            console.log(app.currentShape);
+
             if (app.currentShape.getClassName() === 'Circle') {
 
 
