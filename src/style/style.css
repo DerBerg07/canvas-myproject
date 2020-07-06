@@ -1,0 +1,12 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+#app{
+    width: 1280px;
+    height: 720px;
+    background-color: gray;
+}
+
+
