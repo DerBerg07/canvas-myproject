@@ -16,6 +16,12 @@ class CApp {
                 elements: this.loadedData.layer[id]
             }))
         };
+
+        this.drawLayer();
+    }
+
+    drawLayer(){
+        this.app.stage.addChild(this.layers[0].Layer);
     }
 
 

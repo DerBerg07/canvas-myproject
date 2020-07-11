@@ -14,14 +14,16 @@ class CLayer {
     createElements(){
         this.elementsData.forEach((element) => {
             this.elements.push(new CElement(element));
-        })
+        });
 
+        console.log(this.elements);
+        this.drawElements();
 
     }
 
     drawElements(){
         this.elements.forEach((element)=>{
-            this.Layer.addChild(element.elementObject)
+            this.Layer.addChild(element.elementObject);
         });
 
     }
