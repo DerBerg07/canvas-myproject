@@ -1,3 +1,5 @@
+let LOADER = new PIXI.Loader();
+
 window.onload = ()=>{
     const container = document.getElementById("app");
     const  app = new PIXI.Application({
@@ -8,9 +10,9 @@ window.onload = ()=>{
 
     container.appendChild(app.view);
 
-    const loader = app.loader;
+    const loader = LOADER;
 
-    loader.add("data", "data/data.json");
+    loader.add("data", "data/data.json").add("icon_translation","sprite/translation.png");
     loader.load();
     loader.onComplete.add(() => {
         const application = new CApp(app);

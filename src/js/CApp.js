@@ -1,7 +1,7 @@
 class CApp {
     constructor(app) {
         this.app = app;
-        this.loadedData = this.app.loader.resources.data.data;
+        this.loadedData = LOADER.resources.data.data;
         this.currentLayer = 1;
         this.layers = [];
 

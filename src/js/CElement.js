@@ -1,15 +1,19 @@
 class CElement {
     constructor(props) {
         this.props = props;
+        console.log(this.props);
         this.elementObject;
+        this.Logo = this.addLogo();
         this.Text = this.addText();
         this.Shape = this.addShape();
+
         this.drawElement();
     }
 
+
     drawElement(){
         this.elementObject = new PIXI.Container();
-        this.elementObject.addChild(this.Shape, this.Text);
+        this.elementObject.addChild(this.Shape, this.Text, this.Logo);
         this.setPosition(100,    this.props.id * 100)
     }
 
@@ -19,10 +23,7 @@ class CElement {
         return Text;
     };
 
-    setTextPosition(height, logoWidth){
-        this.Text.y  = height/2;
-        this.Text.x  = logoWidth + 20;
-    }
+
 
     addShape(){
         let height = this.Text.height + 50;
@@ -48,8 +49,30 @@ class CElement {
 
 
         this.setTextPosition(height, logoShapeWidth);
+        this.setIconPosition(height, logoShapeWidth);
         return Shape
 
+    }
+
+    addLogo(){
+        let icon =  new PIXI.Sprite.from(LOADER.resources.icon_translation.texture);
+        icon.height = 45;
+        icon.width = 45;
+        icon.anchor.set(0.5);
+
+        return icon;
+
+    }
+
+
+    setIconPosition(height, logoWidth){
+        this.Logo.y  = height/2;
+        this.Logo.x  = logoWidth/2;
+    }
+
+    setTextPosition(height, logoWidth){
+        this.Text.y  = height/2;
+        this.Text.x  = logoWidth + 20;
     }
 
     setPosition(x,y){
