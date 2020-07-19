@@ -2,9 +2,11 @@ class CApp {
     constructor(app) {
         this.app = app;
         this.loadedData = LOADER.resources.data.data;
-        this.currentLayer = 1;
+        this.currentLayer = 0;
         this.layers = [];
+        this.controller = new CController(this.app, this.layers, this.currentLayer);
 
+        this.drawController();
         this.createLayers();
     }
 
@@ -17,7 +19,12 @@ class CApp {
             }))
         };
 
+
         this.drawLayer();
+    }
+
+    drawController(){
+        this.app.stage.addChild(this.controller.Controller_container);
     }
 
     drawLayer(){

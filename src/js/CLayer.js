@@ -16,7 +16,6 @@ class CLayer {
             this.elements.push(new CElement(element));
         });
 
-        console.log(this.elements);
         this.drawElements();
 
     }

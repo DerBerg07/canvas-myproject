@@ -1,7 +1,6 @@
 class CElement {
     constructor(props) {
         this.props = props;
-        console.log(this.props);
         this.elementObject;
         this.Logo = this.addLogo();
         this.Text = this.addText();

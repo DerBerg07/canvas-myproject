@@ -9,7 +9,6 @@ window.onload = ()=>{
     });
 
     container.appendChild(app.view);
-
     const loader = LOADER;
 
     loader.add("data", "data/data.json").add("icon_translation","sprite/translation.png");
